@@ -15,27 +15,22 @@
   }
   .app { max-width: 1040px; margin: 0 auto; padding: 40px 24px; }
 
-  h1 {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.4px;
-    color: #1d1d1f;
-    margin-bottom: 32px;
-  }
+  h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; color: #1d1d1f; margin-bottom: 32px; }
 
-  .controls {
+  .card {
     background: #fff;
     border-radius: 14px;
     padding: 28px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     border: 1px solid #e8e8ed;
   }
+
   .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   @media (max-width: 640px) { .control-grid { grid-template-columns: 1fr; } }
 
   .control-group { display: flex; flex-direction: column; gap: 8px; }
-  .control-group label {
+  .control-group > label {
     font-size: 12px;
     font-weight: 600;
     color: #86868b;
@@ -68,9 +63,74 @@
     cursor: pointer;
     background: none;
     padding: 2px;
+    flex-shrink: 0;
   }
   .color-input-row input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
   .color-input-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 7px; }
+
+  .add-color-btn {
+    background: transparent;
+    border: 1px dashed #c7c7cc;
+    border-radius: 10px;
+    padding: 10px 16px;
+    color: #86868b;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .add-color-btn:hover {
+    border-color: #0071e3;
+    color: #0071e3;
+  }
+
+  .color-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .color-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f5f7;
+    border: 1px solid #e8e8ed;
+    border-radius: 8px;
+    padding: 6px 10px 6px 8px;
+    font-size: 12px;
+    font-family: 'SF Mono', 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .color-chip:hover { border-color: #c7c7cc; }
+  .color-chip .dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+  .color-chip .remove {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: #c7c7cc;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+    padding: 0;
+  }
+  .color-chip .remove:hover { color: #ff3b30; background: rgba(255,59,48,0.08); }
+  .color-chip.active {
+    border-color: #0071e3;
+    box-shadow: 0 0 0 2px rgba(0,113,227,0.15);
+  }
 
   .mode-toggle {
     display: flex;
@@ -126,6 +186,18 @@
     font-family: 'SF Mono', 'JetBrains Mono', monospace;
   }
 
+  .reset-link {
+    background: none;
+    border: none;
+    color: #86868b;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .reset-link:hover { color: #0071e3; text-decoration: underline; }
+
   .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
   .checkbox-row input[type="checkbox"] {
     width: 18px;
@@ -153,14 +225,42 @@
     border: 1px solid #e8e8ed;
   }
 
+  .grid-row {
+    display: contents;
+  }
+
+  .grid-row:not(:last-child) .swatch {
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .grid-row-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    background: #fafafa;
+    font-size: 11px;
+    font-family: 'SF Mono', 'JetBrains Mono', monospace;
+    color: #86868b;
+    border-right: 1px solid #e8e8ed;
+    min-width: 56px;
+  }
+
+  .grid-row-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
   .swatch {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding: 14px 8px 12px;
-    min-height: 110px;
+    padding: 12px 6px 10px;
+    min-height: 100px;
     transition: transform 0.15s, box-shadow 0.15s;
     cursor: pointer;
   }
@@ -171,21 +271,21 @@
   }
 
   .swatch .stop-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #fff;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     text-shadow: 0 1px 4px rgba(0,0,0,0.35);
   }
   .swatch .hex-label {
-    font-size: 11px;
+    font-size: 10px;
     font-family: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
-    color: rgba(255,255,255,0.65);
+    color: rgba(255,255,255,0.6);
     text-shadow: 0 1px 4px rgba(0,0,0,0.35);
   }
   .swatch.light-text .stop-label,
   .swatch.light-text .hex-label {
-    color: rgba(0,0,0,0.55);
+    color: rgba(0,0,0,0.5);
     text-shadow: 0 1px 2px rgba(255,255,255,0.2);
   }
 
@@ -196,9 +296,9 @@
     transform: translate(-50%, -50%);
     background: rgba(0,0,0,0.85);
     color: #fff;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-size: 11px;
     font-weight: 500;
     opacity: 0;
     transition: opacity 0.2s;
@@ -215,33 +315,12 @@
     color: #86868b;
   }
 
-  .base-preview {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #e8e8ed;
-  }
-  .base-preview .base-swatch {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    border: 1px solid #e8e8ed;
-    flex-shrink: 0;
-  }
-  .base-preview .base-info {
-    font-size: 13px;
-    color: #86868b;
-  }
-  .base-preview .base-info span { color: #1d1d1f; font-weight: 500; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
-
   @media (max-width: 600px) {
     .app { padding: 24px 16px; }
-    .controls { padding: 20px; }
-    .swatch { min-height: 90px; padding: 10px 4px 8px; }
-    .swatch .stop-label { font-size: 11px; }
-    .swatch .hex-label { font-size: 10px; }
+    .card { padding: 20px; }
+    .swatch { min-height: 80px; padding: 8px 3px 6px; }
+    .swatch .stop-label { font-size: 10px; }
+    .swatch .hex-label { font-size: 9px; }
   }
 </style>
 </head>
@@ -250,18 +329,16 @@
 <div class="app">
   <h1>Color Stops</h1>
 
-  <div class="controls">
+  <div class="card">
     <div class="control-grid">
       <div class="control-group">
-        <label>Base Color</label>
+        <label>Base Colors</label>
         <div class="color-input-row">
-          <input type="text" id="hexInput" value="#E9553B" maxlength="7" spellcheck="false">
+          <input type="text" id="hexInput" value="#E9553B" maxlength="7" spellcheck="false" placeholder="#HEX">
           <input type="color" id="colorPicker" value="#E9553B">
         </div>
-        <div id="basePreview" class="base-preview" style="display:none">
-          <div class="base-swatch" id="baseSwatch"></div>
-          <div class="base-info">base · <span id="baseHexLabel">#E9553B</span> · stop 500</div>
-        </div>
+        <button class="add-color-btn" id="addColorBtn">+ Add Color</button>
+        <div class="color-chips" id="colorChips"></div>
       </div>
 
       <div class="control-group">
@@ -273,7 +350,10 @@
       </div>
 
       <div class="control-group">
-        <label>Number of Stops</label>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;">
+          <label>Number of Stops</label>
+          <button class="reset-link" id="resetStops">reset to 12</button>
+        </div>
         <div class="stops-row">
           <input type="range" id="stopsRange" min="2" max="24" value="12">
           <span class="stops-value" id="stopsDisplay">12</span>
@@ -308,21 +388,23 @@ const IMAGE_STOPS = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
 
 const hexInput = document.getElementById('hexInput');
 const colorPicker = document.getElementById('colorPicker');
+const addColorBtn = document.getElementById('addColorBtn');
+const colorChips = document.getElementById('colorChips');
 const stopsRange = document.getElementById('stopsRange');
 const stopsDisplay = document.getElementById('stopsDisplay');
+const resetStops = document.getElementById('resetStops');
 const modeBtns = document.querySelectorAll('#modeToggle button');
 const distBtns = document.querySelectorAll('#distToggle button');
 const includeBW = document.getElementById('includeBW');
 const grid = document.getElementById('grid');
-const basePreview = document.getElementById('basePreview');
-const baseSwatch = document.getElementById('baseSwatch');
-const baseHexLabel = document.getElementById('baseHexLabel');
 const stopCountLabel = document.getElementById('stopCountLabel');
 
 let mode = 'tintshade';
 let distribution = 'image';
-let currentHex = '#E9553B';
+let colors = ['#E9553B'];
+let activeColorIdx = 0;
 
+// ---- Color utils ----
 function hexToRgb(hex) {
   const c = hex.replace('#','');
   return { r: parseInt(c.slice(0,2),16), g: parseInt(c.slice(2,4),16), b: parseInt(c.slice(4,6),16) };
@@ -355,31 +437,50 @@ function luminance(r,g,b){
   const [R,G,B]=[r,g,b].map(x=>{x/=255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4);});
   return 0.2126*R+0.7152*G+0.0722*B;
 }
+function isLight(hex) {
+  const c = hexToRgb(hex);
+  return luminance(c.r, c.g, c.b) > 0.55;
+}
 
+// ---- Stop generation ----
 function distributeStops(n, dist) {
   if (dist === 'image') {
-    if (n === 0) return [];
+    if (n <= 0) return [];
     if (n === 1) return [500];
-    if (n >= 12) return [...IMAGE_STOPS];
-    const step = 11 / (n - 1);
-    const indices = Array.from({length: n}, (_, i) => Math.round(i * step));
-    return indices.map(i => IMAGE_STOPS[i]);
+    // Interpolate IMAGE_STOPS for any N
+    const src = IMAGE_STOPS;
+    const srcLen = src.length; // 12
+    if (n <= srcLen) {
+      const step = (srcLen - 1) / (n - 1 || 1);
+      return Array.from({length: n}, (_, i) => {
+        const idx = Math.round(i * step);
+        return src[Math.min(idx, srcLen - 1)];
+      });
+    } else {
+      // For n > 12, interpolate between adjacent values
+      return Array.from({length: n}, (_, i) => {
+        const t = (i / (n - 1)) * (srcLen - 1);
+        const lo = Math.floor(t);
+        const hi = Math.min(lo + 1, srcLen - 1);
+        const frac = t - lo;
+        return Math.round(src[lo] + (src[hi] - src[lo]) * frac);
+      });
+    }
   } else {
-    if (n === 0) return [];
+    if (n <= 0) return [];
     if (n === 1) return [500];
-    if (n === 2) return [0, 1000];
     return Array.from({length: n}, (_, i) => Math.round((i / (n - 1)) * 1000));
   }
 }
 
-function computeColor(stop, baseHex, mode, includeBW) {
-  if (includeBW) {
+function computeColor(stop, baseHex, md, inclBW) {
+  if (inclBW) {
     if (stop === 0) return '#FFFFFF';
     if (stop === 1000) return '#000000';
   }
   const base = hexToRgb(baseHex);
 
-  if (mode === 'tintshade') {
+  if (md === 'tintshade') {
     if (stop <= 500) {
       const t = stop / 500;
       return rgbToHex(
@@ -403,40 +504,94 @@ function computeColor(stop, baseHex, mode, includeBW) {
     } else {
       l = hsl.l * (1 - (stop - 500) / 500) + 5 * ((stop - 500) / 500);
     }
-    if (includeBW) { l = Math.max(0, Math.min(100, l)); }
+    if (inclBW) { l = Math.max(0, Math.min(100, l)); }
     else { l = Math.max(5, Math.min(95, l)); }
     const rgb = hslToRgb(hsl.h, hsl.s, l);
     return rgbToHex(rgb.r, rgb.g, rgb.b);
   }
 }
 
-function isLight(hex) {
-  const c = hexToRgb(hex);
-  return luminance(c.r, c.g, c.b) > 0.55;
+// ---- Chips ----
+function renderChips() {
+  let html = '';
+  colors.forEach((c, i) => {
+    const active = i === activeColorIdx ? ' active' : '';
+    html += `
+      <div class="color-chip${active}" data-idx="${i}">
+        <span class="dot" style="background:${c}"></span>
+        ${c.toUpperCase()}
+        ${colors.length > 1 ? '<button class="remove" data-idx="'+i+'">×</button>' : ''}
+      </div>
+    `;
+  });
+  colorChips.innerHTML = html;
+
+  // Click chip to set active color
+  colorChips.querySelectorAll('.color-chip').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.remove')) return;
+      activeColorIdx = parseInt(el.dataset.idx);
+      const hex = colors[activeColorIdx];
+      currentHex = hex;
+      hexInput.value = hex;
+      colorPicker.value = hex;
+      renderChips();
+    });
+  });
+
+  // Remove color
+  colorChips.querySelectorAll('.remove').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.idx);
+      colors.splice(idx, 1);
+      if (activeColorIdx >= colors.length) activeColorIdx = colors.length - 1;
+      if (activeColorIdx < 0) activeColorIdx = 0;
+      if (colors.length === 0) {
+        // Shouldn't happen but guard
+        colors = ['#0071e3'];
+        activeColorIdx = 0;
+      }
+      hexInput.value = colors[activeColorIdx];
+      colorPicker.value = colors[activeColorIdx];
+      renderChips();
+      render();
+    });
+  });
 }
 
+// ---- Render ----
 function render() {
   const n = parseInt(stopsRange.value);
   const stops = distributeStops(n, distribution);
-
-  grid.style.gridTemplateColumns = `repeat(${Math.min(stops.length, 12)}, 1fr)`;
+  const nCols = Math.min(stops.length, 12);
 
   let html = '';
-  for (const stop of stops) {
-    const hex = computeColor(stop, currentHex, mode, includeBW.checked);
-    const light = isLight(hex);
-    // Strip # and uppercase for display
-    const displayHex = hex.replace('#','').toUpperCase();
-    html += `
-      <div class="swatch ${light?'light-text':''}" style="background:${hex}" data-copy="${displayHex}">
-        <div class="stop-label">${stop}</div>
-        <div class="hex-label">${displayHex}</div>
-        <div class="copied-toast">Copied!</div>
-      </div>
-    `;
-  }
+  colors.forEach((baseHex, ci) => {
+    html += `<div class="grid-row" style="display:grid;grid-template-columns: auto repeat(${nCols}, 1fr);">`;
+    // Label
+    const isActive = ci === activeColorIdx;
+    html += `<div class="grid-row-label" style="${isActive?'font-weight:600;color:#1d1d1f;':''}">${baseHex.replace('#','').toUpperCase()}</div>`;
+    // Swatches
+    for (const stop of stops) {
+      const hex = computeColor(stop, baseHex, mode, includeBW.checked);
+      const light = isLight(hex);
+      const displayHex = hex.replace('#','').toUpperCase();
+      html += `
+        <div class="swatch ${light?'light-text':''}" style="background:${hex}" data-copy="${displayHex}">
+          <div class="stop-label">${stop}</div>
+          <div class="hex-label">${displayHex}</div>
+          <div class="copied-toast">Copied!</div>
+        </div>
+      `;
+    }
+    html += `</div>`;
+  });
+
   grid.innerHTML = html;
-  document.querySelectorAll('.swatch').forEach(el => {
+
+  // Click handlers
+  grid.querySelectorAll('.swatch').forEach(el => {
     el.addEventListener('click', () => {
       const code = el.dataset.copy;
       navigator.clipboard.writeText(code).then(() => {
@@ -449,35 +604,47 @@ function render() {
   });
 
   const label = distribution === 'image' && n >= 12 ? '12 stops' : `${stops.length} stops`;
-  stopCountLabel.textContent = label;
+  stopCountLabel.textContent = `${colors.length} color · ${label}`;
   stopsDisplay.textContent = n;
 }
 
+// ---- Events ----
 hexInput.addEventListener('input', () => {
   let v = hexInput.value.trim();
   if (/^#[0-9a-fA-F]{6}$/.test(v) || /^[0-9a-fA-F]{6}$/.test(v)) {
     if (!v.startsWith('#')) v = '#' + v;
-    if (v !== currentHex) {
-      currentHex = v;
-      colorPicker.value = v;
-      baseSwatch.style.background = v;
-      baseHexLabel.textContent = v.toUpperCase();
-      basePreview.style.display = 'flex';
-      render();
-    }
+    colors[activeColorIdx] = v;
+    currentHex = v;
+    colorPicker.value = v;
+    renderChips();
+    render();
   }
 });
 
 colorPicker.addEventListener('input', () => {
-  currentHex = colorPicker.value;
-  hexInput.value = currentHex;
-  baseSwatch.style.background = currentHex;
-  baseHexLabel.textContent = currentHex.toUpperCase();
-  basePreview.style.display = 'flex';
+  const v = colorPicker.value;
+  colors[activeColorIdx] = v;
+  currentHex = v;
+  hexInput.value = v;
+  renderChips();
+  render();
+});
+
+addColorBtn.addEventListener('click', () => {
+  const newColor = '#0071e3';
+  colors.push(newColor);
+  activeColorIdx = colors.length - 1;
+  hexInput.value = newColor;
+  colorPicker.value = newColor;
+  renderChips();
   render();
 });
 
 stopsRange.addEventListener('input', render);
+resetStops.addEventListener('click', () => {
+  stopsRange.value = 12;
+  render();
+});
 
 modeBtns.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -499,12 +666,10 @@ distBtns.forEach(btn => {
 
 includeBW.addEventListener('change', render);
 
-{
-  baseSwatch.style.background = currentHex;
-  baseHexLabel.textContent = currentHex.toUpperCase();
-  basePreview.style.display = 'flex';
-  render();
-}
+// Init
+let currentHex = '#E9553B';
+renderChips();
+render();
 </script>
 </body>
 </html>
