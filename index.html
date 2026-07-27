@@ -6,62 +6,239 @@
 <title>Color Stop Generator</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
-  .app { max-width: 1000px; margin: 0 auto; padding: 32px 20px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app { max-width: 1040px; margin: 0 auto; padding: 40px 24px; }
 
-  h1 { font-size: 24px; font-weight: 600; margin-bottom: 28px; color: #fff; letter-spacing: -0.3px; }
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    color: #1d1d1f;
+    margin-bottom: 32px;
+  }
 
-  .controls { background: #16213e; border-radius: 16px; padding: 24px; margin-bottom: 28px; border: 1px solid #1f3460; }
-  .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .controls {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    border: 1px solid #e8e8ed;
+  }
+  .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   @media (max-width: 640px) { .control-grid { grid-template-columns: 1fr; } }
 
-  .control-group { display: flex; flex-direction: column; gap: 6px; }
-  .control-group label { font-size: 13px; font-weight: 500; color: #8b9dc3; text-transform: uppercase; letter-spacing: 0.5px; }
+  .control-group { display: flex; flex-direction: column; gap: 8px; }
+  .control-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #86868b;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
 
   .color-input-row { display: flex; gap: 10px; align-items: center; }
-  .color-input-row input[type="text"] { flex: 1; background: #0f3460; border: 1px solid #1a4a8a; border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 15px; font-family: 'SF Mono', 'JetBrains Mono', monospace; outline: none; transition: border 0.2s; }
-  .color-input-row input[type="text"]:focus { border-color: #4a9eff; }
-  .color-input-row input[type="color"] { width: 44px; height: 44px; border: 2px solid #1a4a8a; border-radius: 8px; cursor: pointer; background: none; padding: 2px; }
-  .color-input-row input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-  .color-input-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+  .color-input-row input[type="text"] {
+    flex: 1;
+    background: #f5f5f7;
+    border: 1px solid #d2d2d7;
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #1d1d1f;
+    font-size: 15px;
+    font-family: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+  .color-input-row input[type="text"]:focus {
+    border-color: #0071e3;
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.12);
+  }
+  .color-input-row input[type="color"] {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #d2d2d7;
+    border-radius: 10px;
+    cursor: pointer;
+    background: none;
+    padding: 2px;
+  }
+  .color-input-row input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+  .color-input-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 7px; }
 
-  .mode-toggle { display: flex; background: #0f3460; border-radius: 8px; overflow: hidden; border: 1px solid #1a4a8a; }
-  .mode-toggle button { flex: 1; padding: 10px 16px; border: none; background: transparent; color: #8b9dc3; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-  .mode-toggle button.active { background: #4a9eff; color: #fff; }
-  .mode-toggle button:not(:last-child) { border-right: 1px solid #1a4a8a; }
+  .mode-toggle {
+    display: flex;
+    background: #f5f5f7;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #d2d2d7;
+  }
+  .mode-toggle button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    color: #86868b;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mode-toggle button.active {
+    background: #fff;
+    color: #1d1d1f;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .mode-toggle button:not(:last-child) { border-right: 1px solid #d2d2d7; }
 
-  .stops-row { display: flex; align-items: center; gap: 12px; }
-  .stops-row input[type="range"] { flex: 1; accent-color: #4a9eff; height: 6px; }
-  .stops-row .stops-value { font-size: 20px; font-weight: 600; color: #4a9eff; min-width: 48px; text-align: center; font-family: 'SF Mono', monospace; }
+  .stops-row { display: flex; align-items: center; gap: 14px; }
+  .stops-row input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: #d2d2d7;
+    border-radius: 2px;
+    outline: none;
+  }
+  .stops-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #d2d2d7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    cursor: pointer;
+  }
+  .stops-row .stops-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
+    min-width: 48px;
+    text-align: center;
+    font-family: 'SF Mono', 'JetBrains Mono', monospace;
+  }
 
-  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-  .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #4a9eff; cursor: pointer; }
-  .checkbox-row label { font-size: 14px; color: #b0c4de; cursor: pointer; }
+  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+  .checkbox-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #0071e3;
+    cursor: pointer;
+  }
+  .checkbox-row label { font-size: 14px; color: #515154; cursor: pointer; }
 
-  .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .preview-header h2 { font-size: 16px; font-weight: 500; color: #8b9dc3; }
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .preview-header h2 { font-size: 15px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.2px; }
+  .preview-header .stop-count { font-size: 13px; color: #86868b; }
 
-  .grid { display: grid; gap: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border: 1px solid #1f3460; }
+  .grid {
+    display: grid;
+    gap: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    border: 1px solid #e8e8ed;
+  }
 
-  .swatch { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 14px 8px 12px; min-height: 110px; transition: transform 0.15s; cursor: pointer; }
-  .swatch:hover { transform: scaleY(1.04); z-index: 2; }
+  .swatch {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 14px 8px 12px;
+    min-height: 110px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+  .swatch:hover {
+    transform: scaleY(1.04);
+    z-index: 2;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
 
-  .swatch .stop-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
-  .swatch .hex-label { font-size: 11px; font-family: 'SF Mono', 'JetBrains Mono', monospace; color: rgba(255,255,255,0.5); text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
-  .swatch.dark-text .stop-label,
-  .swatch.dark-text .hex-label { color: rgba(0,0,0,0.6); text-shadow: 0 1px 3px rgba(255,255,255,0.15); }
+  .swatch .stop-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  }
+  .swatch .hex-label {
+    font-size: 11px;
+    font-family: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
+    color: rgba(255,255,255,0.65);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  }
+  .swatch.light-text .stop-label,
+  .swatch.light-text .hex-label {
+    color: rgba(0,0,0,0.55);
+    text-shadow: 0 1px 2px rgba(255,255,255,0.2);
+  }
 
-  .swatch .copied-toast { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+  .swatch .copied-toast {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: none;
+  }
   .swatch .copied-toast.show { opacity: 1; }
 
-  .footer { margin-top: 20px; text-align: center; font-size: 12px; color: #4a5a7a; }
+  .footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #86868b;
+  }
 
-  .base-preview { display: flex; align-items: center; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #1f3460; }
-  .base-preview .base-swatch { width: 48px; height: 48px; border-radius: 10px; border: 2px solid #1f3460; flex-shrink: 0; }
-  .base-preview .base-info { font-size: 13px; color: #8b9dc3; }
-  .base-preview .base-info strong { color: #fff; font-family: 'SF Mono', monospace; }
+  .base-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e8e8ed;
+  }
+  .base-preview .base-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #e8e8ed;
+    flex-shrink: 0;
+  }
+  .base-preview .base-info {
+    font-size: 13px;
+    color: #86868b;
+  }
+  .base-preview .base-info span { color: #1d1d1f; font-weight: 500; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
 
   @media (max-width: 600px) {
+    .app { padding: 24px 16px; }
+    .controls { padding: 20px; }
     .swatch { min-height: 90px; padding: 10px 4px 8px; }
     .swatch .stop-label { font-size: 11px; }
     .swatch .hex-label { font-size: 10px; }
@@ -71,7 +248,7 @@
 <body>
 
 <div class="app">
-  <h1>🎨 Color Stop Generator</h1>
+  <h1>Color Stops</h1>
 
   <div class="controls">
     <div class="control-grid">
@@ -83,7 +260,7 @@
         </div>
         <div id="basePreview" class="base-preview" style="display:none">
           <div class="base-swatch" id="baseSwatch"></div>
-          <div class="base-info">Base · <strong id="baseHexLabel">#E9553B</strong> · stop <strong>500</strong></div>
+          <div class="base-info">base · <span id="baseHexLabel">#E9553B</span> · stop 500</div>
         </div>
       </div>
 
@@ -111,7 +288,7 @@
         </div>
         <div class="checkbox-row">
           <input type="checkbox" id="includeBW" checked>
-          <label for="includeBW">Include pure white (#000) &amp; black (#FFF) at edges</label>
+          <label for="includeBW">Include pure black &amp; white at edges</label>
         </div>
       </div>
     </div>
@@ -119,11 +296,11 @@
 
   <div class="preview-header">
     <h2>Preview</h2>
-    <span style="font-size:13px; color:#4a5a7a;" id="stopCountLabel">12 stops</span>
+    <span class="stop-count" id="stopCountLabel">12 stops</span>
   </div>
   <div class="grid" id="grid"></div>
 
-  <div class="footer">Click any swatch to copy its hex code</div>
+  <div class="footer">Click any swatch to copy hex code</div>
 </div>
 
 <script>
@@ -146,7 +323,6 @@ let mode = 'tintshade';
 let distribution = 'image';
 let currentHex = '#E9553B';
 
-// ---- Color utils ----
 function hexToRgb(hex) {
   const c = hex.replace('#','');
   return { r: parseInt(c.slice(0,2),16), g: parseInt(c.slice(2,4),16), b: parseInt(c.slice(4,6),16) };
@@ -180,7 +356,6 @@ function luminance(r,g,b){
   return 0.2126*R+0.7152*G+0.0722*B;
 }
 
-// ---- Stop generation ----
 function distributeStops(n, dist) {
   if (dist === 'image') {
     if (n === 0) return [];
@@ -235,12 +410,11 @@ function computeColor(stop, baseHex, mode, includeBW) {
   }
 }
 
-function isDark(hex) {
+function isLight(hex) {
   const c = hexToRgb(hex);
-  return luminance(c.r, c.g, c.b) < 0.4;
+  return luminance(c.r, c.g, c.b) > 0.55;
 }
 
-// ---- Render ----
 function render() {
   const n = parseInt(stopsRange.value);
   const stops = distributeStops(n, distribution);
@@ -250,11 +424,13 @@ function render() {
   let html = '';
   for (const stop of stops) {
     const hex = computeColor(stop, currentHex, mode, includeBW.checked);
-    const dark = isDark(hex);
+    const light = isLight(hex);
+    // Strip # and uppercase for display
+    const displayHex = hex.replace('#','').toUpperCase();
     html += `
-      <div class="swatch ${dark?'dark-text':''}" style="background:${hex}" data-hex="${hex}">
+      <div class="swatch ${light?'light-text':''}" style="background:${hex}" data-copy="${displayHex}">
         <div class="stop-label">${stop}</div>
-        <div class="hex-label">${hex.toUpperCase()}</div>
+        <div class="hex-label">${displayHex}</div>
         <div class="copied-toast">Copied!</div>
       </div>
     `;
@@ -262,21 +438,21 @@ function render() {
   grid.innerHTML = html;
   document.querySelectorAll('.swatch').forEach(el => {
     el.addEventListener('click', () => {
-      const hex = el.dataset.hex;
-      navigator.clipboard.writeText(hex).then(() => {
+      const code = el.dataset.copy;
+      navigator.clipboard.writeText(code).then(() => {
         const toast = el.querySelector('.copied-toast');
+        toast.textContent = `Copied ${code}`;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 800);
+        setTimeout(() => toast.classList.remove('show'), 900);
       }).catch(() => {});
     });
   });
 
-  const label = distribution === 'image' && n >= 12 ? '12 stops (image default)' : `${stops.length} stops`;
+  const label = distribution === 'image' && n >= 12 ? '12 stops' : `${stops.length} stops`;
   stopCountLabel.textContent = label;
   stopsDisplay.textContent = n;
 }
 
-// ---- Events ----
 hexInput.addEventListener('input', () => {
   let v = hexInput.value.trim();
   if (/^#[0-9a-fA-F]{6}$/.test(v) || /^[0-9a-fA-F]{6}$/.test(v)) {
@@ -323,9 +499,7 @@ distBtns.forEach(btn => {
 
 includeBW.addEventListener('change', render);
 
-// Init
 {
-  const c = hexToRgb(currentHex);
   baseSwatch.style.background = currentHex;
   baseHexLabel.textContent = currentHex.toUpperCase();
   basePreview.style.display = 'flex';
